@@ -3,10 +3,10 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: awx
-  namespace: default
+  namespace: awx
 spec:
   rules:
-  - host: awx.minikube.rsletten.com
+  - host: awx.k8s.rsletten.com
     http:
       paths:
       - path: "/"

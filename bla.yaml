@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: awx-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: 'true'
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    cert-manager.io/cluster-issuer: letsencrypt-staging
+  labels:
+    app.kubernetes.io/instance: awx
+    app.kubernetes.io/name: awx
+spec:
+  tls:
+  - hosts:
+    - awx.k8s.rsletten.com
+    secretName: awx-secret-tls
+  rules:
+    - host: awx.k8s.rsletten.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: awx-service
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
