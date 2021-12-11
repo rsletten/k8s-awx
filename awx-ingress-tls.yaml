@@ -2,22 +2,25 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: 'true'
   name: awx
   namespace: awx
-  annotations:
-    kubernetes.io/ingress.class: nginx
-  labels:
-    app.kubernetes.io/instance: awx
-    app.kubernetes.io/name: awx
 spec:
   rules:
   - host: awx.k8s.rsletten.com
     http:
       paths:
-      - path: /
+      - path: "/"
         pathType: Prefix
         backend:
           service:
             name: awx-service
             port:
               number: 80
+  tls:
+  - hosts:
+    - awx.k8s.rsletten.com
+    secretName: awx-prod-cert
